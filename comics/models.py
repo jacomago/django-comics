@@ -121,7 +121,7 @@ class Strip(DatedModel):
                             help_text=_("Comma separeted (ex: subject, subject...") )
 
     enable_comments = models.BooleanField(_('Enable comments?'), default=False)
-    
+
     class Meta:
         ordering = ["-created_time"]
         get_latest_by = "created_time"
@@ -141,6 +141,17 @@ class Strip(DatedModel):
         return Link(self)
 
     get_absolute_url = link # alias
+
+class Points(DatedModel):
+    on_strip = models.ForeignKey('Strip', null=True, blank=True, editable=False,
+                            related_name="current", verbose_name=_("Current Strip"))
+    too_strip = models.ForeignKey('Strip', null=True, blank=True, editable=True,
+                            related_name="too", verbose_name=_("Too Strip"))
+    rollover_text = models.CharField(_("Word's from rollover of mouse?"), max_length=100,blank=True, null=True, help_text=_("see it when put mouse over."))
+    SHAPE_CHOICES = (
+        ('C', 'circle'),
+        ('R', 'rectangle'),
+        ('P','polygon'))
 
 # --- SIGNALS ---
 
