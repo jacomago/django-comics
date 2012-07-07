@@ -158,13 +158,13 @@ class Points(DatedModel):
         ('P','polygon'))
     shape_choice = models.CharField(max_length=1,choices=SHAPE_CHOICES)
 
-    if self.shape_choice == 'C':
-        number_of_coords =3
-    elif self.shape_choice == 'R':
-        number_of_coords =3
-    else:
-        number_of_coords = 10
-    shape_coordinates = models.CharField(max_length = number_of_coords)
+    # if self.shape_choice == 'C':
+    #     number_of_coords =3
+    # elif self.shape_choice == 'R':
+    #     number_of_coords =3
+    # else:
+    #     number_of_coords = 10
+    shape_coordinates = models.CharField(max_length = 10)
 
 # --- SIGNALS ---
 
