@@ -101,6 +101,7 @@ class WebComic(DatedModel):
 
 class Strip(DatedModel):
     "Representa uma tirinha de uma revistinha do autor"
+
     next_strip = models.ForeignKey('Strip', null=True, blank=True, editable=False,
                             related_name="next", verbose_name=_("Next Strip"))
     prev_strip = models.ForeignKey('Strip', null=True, blank=True, editable=False,

@@ -15,10 +15,10 @@ wc_list = {
 urlpatterns = patterns('',
 
     # showing all the webcomics
-    (r'^$', views.show_webcomic, {}, "comics-index"),
-
+    (r'^$', views.show_webcomic, {}, "comics-first-webcomic"),
+    (r'^comics', object_list, wc_list, "comics-index"),
     (r'^edit/(?P<slug>[\d\w\-_]+)/$', views.edit, {}, "comics-edit-webcomic"),
-    (r'^edit/(?P<slug>[\d\w\-_]+)/strip/(?P<pk>\d+)/$', views.edit, {}, "comics-edit-strip"),
+    (r'^edit/(?P<slug>[\d\w\-_]+)/(?P<pk>\d+)-strip/$', views.edit, {}, "comics-edit-strip"),
 
     # shows webcomic (current strip)
     (r'^(?P<slug>[\d\w\-_]+)/$', views.show_webcomic, {}, "comics-webcomic"),
