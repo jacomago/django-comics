@@ -32,19 +32,20 @@ templates_dir= "comics"
 
 
 def rp(template_name, ctx, request):
-    return render_to_response(path.join(templates_dir, template_name), 
+    return render_to_response(path.join(templates_dir, template_name),
                               ctx, context_instance=RequestContext(request))
 
 
-def show_webcomic(request, slug, strip_id=None, template_name="webcomic.html"):
+def show_webcomic(request, slug=None, strip_id=None, template_name="webcomic.html"):
     ctx = {}
-    ctx["webcomic"] = get_object(WebComic, slug=slug)    
+    if slug is not None:
+        ctx["webcomic"] = get_object(WebComic, slug=slug)
+    else: ctx["webcomic"] = WebComic.objects.all()[0]
     ctx["blog_pages"]=ctx["webcomic"].blog_page_list.filter(published=True)
-    
+
     if strip_id is not None:
         ctx["strip"] = get_object(Strip, pk=strip_id)
-    else: ctx["strip"] = ctx["webcomic"].current_strip()
-    
+    else: ctx["strip"] = ctx["webcomic"].first_strip()
     return rp(template_name, ctx, request)
 
 
@@ -65,16 +66,16 @@ def show_blog_page(request, slug, page_id, template_name="blog_page.html"):
 def edit(request, slug, pk=None, template_name="edit.html"):
     ctx, Form={}, EditWCForm
     ctx["webcomic"] = get_object(WebComic, pk=slug)
-    
+
     if request.user != ctx["webcomic"].owner:
         return HttpResponseForbidden("You can not do that.", 'plain/text')
-    
+
     if pk is not None:
         ctx["strip"] = get_object(Strip, pk=pk)
         Form = EditStripForm
         instance = ctx["strip"]
     else: instance = ctx["webcomic"]
-    
+
     if request.method=="POST":
         ctx["form"] = Form(request.POST, request.FILES, instance=instance)
         if ctx["form"].is_valid():
@@ -87,10 +88,10 @@ def edit(request, slug, pk=None, template_name="edit.html"):
 def add_strip(request, slug, template_name="edit.html"):
     ctx = {}
     ctx["webcomic"] = get_object(WebComic, pk=slug)
-    
+
     if request.user != ctx["webcomic"].owner:
         return HttpResponseForbidden("You can not do that.", 'plain/text')
-    
+
     if request.method=="POST":
         ctx["form"] = EditStripForm(request.POST, request.FILES)
         if ctx["form"].is_valid():

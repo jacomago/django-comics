@@ -4,13 +4,13 @@
 {% block more-options %}
 {% if user.is_authenticated %}
 {% ifequal webcomic.owner user %}
-    <strong>Webcomic:</strong>
-    <a href="{{ webcomic.link.edit }}">Edit</a>
-    -
-    <strong>Strip:</strong>
-    <a href="{{ webcomic.link.add_strip }}">Add</a>
+    <li><strong>Webcomic:</strong>
+    <a href="{{ webcomic.link.edit }}">Edit</a></li>
+
+    <li><strong>Strip:</strong>
+    <a href="{{ webcomic.link.add_strip }}">Add</a></li>
     {% if strip %}
-    <a href="{{ strip.link.edit }}">Edit</a>
+    <li><a href="{{ strip.link.edit }}">Edit</a></li>
     {% endif %}
 {% endifequal %}
 {% endif %}
@@ -28,19 +28,23 @@
 {% endif %}
 
 {% if strip %}
-
-    <div class="clear strip_content">
-        <a {% if strip.next_strip %} href="{{ strip.next_strip.link }}" {% else %} href="{{ strip.link }}" {% endif %}>
-            <img id="strip_image" title="{{ strip.name }}" alt="Strip {{ strip.name }}" src="{{ strip.image.url }}"></img></a>
+    <div id="titleofcomic">
+        <h1>{{ strip.name }}</h1>
+    </div>
+    <div class="comics">
+      <img id="strip_image" title="{{ strip.name }}" alt="Strip {{ strip.name }}" src="{{ strip.image.url }}"class ="comicimage" usemap = #map></img>
+      <map name="map">
+        {% for map in strip.map_set.all %}
+        <area shape="{{ map.shape_choice }}" coords="{{ map.shape_coordinates }}" alt="{{ map.rollover_text }}" href="{{ map.too_strip.get_absolute_url }}" title = "{{ map.rollover_text }}"/>
+        {% endfor %}
+      </map>
     </div>
 
     {% if strip.legend %}
-    <div class="clear strip_legend">
+    <div class="comicscript">
         {{ strip.legend|markdown }}
     </div>
     {% endif %}
-
-    {% include "comics/includes/simple_forward_bar.html" %}
 
 {% else %}
 <div class="notice">

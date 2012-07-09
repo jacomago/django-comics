@@ -142,21 +142,19 @@ class Strip(DatedModel):
 
     get_absolute_url = link # alias
 
-class Points(DatedModel):
-    on_strip = models.ForeignKey('Strip', null=True, blank=True, editable=False,
-                            related_name="current", verbose_name=_("Current Strip"))
-    too_strip = models.ForeignKey('Strip', null=True, blank=True, editable=True,
-                            related_name="too", verbose_name=_("Too Strip"))
+class Map(DatedModel):
+    on_strip = models.ForeignKey(Strip)
+    too_strip = models.ForeignKey(Strip, related_name='link')
 
     rollover_text = models.CharField(_("Word's from rollover of mouse?"),
                                      max_length=100,blank=True, null=True,
                                      help_text=_("see it when put mouse over."))
 
     SHAPE_CHOICES = (
-        ('C', 'circle'),
-        ('R', 'rectangle'),
-        ('P','polygon'))
-    shape_choice = models.CharField(max_length=1,choices=SHAPE_CHOICES)
+        ('circle', 'circle'),
+        ('rectangle', 'rectangle'),
+        ('polygon','polygon'))
+    shape_choice = models.CharField(max_length=11,choices=SHAPE_CHOICES)
 
     # if self.shape_choice == 'C':
     #     number_of_coords =3
@@ -164,7 +162,11 @@ class Points(DatedModel):
     #     number_of_coords =3
     # else:
     #     number_of_coords = 10
-    shape_coordinates = models.CharField(max_length = 10)
+    shape_coordinates = models.CharField(max_length = 100)
+    def __unicode__(self):
+        return "strip %s to %s - %s" % (self.on_strip.name,
+                                        self.too_strip.name,
+                                        self.rollover_text)
 
 # --- SIGNALS ---
 

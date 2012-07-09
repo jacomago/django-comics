@@ -13,23 +13,23 @@ wc_list = {
 }
 
 urlpatterns = patterns('',
-    
+
     # showing all the webcomics
-    (r'^$', object_list, wc_list, "comics-index"),
-    
+    (r'^$', views.show_webcomic, {}, "comics-index"),
+
     (r'^edit/(?P<slug>[\d\w\-_]+)/$', views.edit, {}, "comics-edit-webcomic"),
     (r'^edit/(?P<slug>[\d\w\-_]+)/strip/(?P<pk>\d+)/$', views.edit, {}, "comics-edit-strip"),
-    
+
     # shows webcomic (current strip)
     (r'^(?P<slug>[\d\w\-_]+)/$', views.show_webcomic, {}, "comics-webcomic"),
-    
+
     (r'^(?P<slug>[\d\w\-_]+)/add/strip/$', views.add_strip, {}, "comics-webcomic-add_strip"),
-    
+
     (r'^(?P<slug>[\d\w\-_]+)/archive/$', views.show_archive, {}, "comics-archive"),
-    
+
     # shows strip
     (r'^(?P<slug>[\d\w\-_]+)/(?P<strip_id>\d+)-strip/$', views.show_webcomic, {}, "comics-strip"),
-    
+
     # blog page
     (r'^(?P<slug>[\d\w\-_]+)/blog/(?P<pk>\d+)-(?P<blog_slug>[\d\w\-\_]+)/$', views.show_blog_page, {}, "comics-blog-page"),
 )
